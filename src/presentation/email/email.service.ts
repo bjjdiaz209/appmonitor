@@ -1,16 +1,22 @@
 import nodemailer from 'nodemailer';
 import { envs } from '../../config/plugins/env.plugin';
+import { LogRepository } from '../../domain/repository/log.repository';
+import { LogEntity, LogSeverityLevel } from '../../domain/entities/log.entity';
 
 
 
 interface SendEmailOptions {
-    to: string;
+    to: string | string[];
     subject: string;
     htmlBody: string;
-    //todo:attachements
+    attachements?: Attachements[];
 
 }
-    //todo:attachements
+  
+  interface Attachements{
+    filename: string;
+    path : string;
+  }
 
 
 
@@ -23,24 +29,68 @@ export class EmailService {
       pass: envs.MAILER_SECRET_KEY,
     }
   });
+  
+  constructor(
+    private readonly logRepository: LogRepository,
+  ) {}
 
   async sendEmail(options: SendEmailOptions): Promise<boolean> {
-    const { to, subject, htmlBody } = options;
+    const { to, subject, htmlBody, attachements =[] } = options;
 
     try {
         const sentInformation = await this.transporter.sendMail({
             to: to,
             subject: subject,
-            html: htmlBody
+            html: htmlBody,
+            attachments: attachements
         } );
-        console.log(sentInformation);
+
+
+        //console.log(sentInformation);
+        const log = new LogEntity({
+          level : LogSeverityLevel.low,
+          message: 'Email sent',
+          origin: 'email.service.ts',
+        })
+        this.logRepository.saveLog(log);
 
         return true
     } catch (error) {
+      const log = new LogEntity({
+        level : LogSeverityLevel.high,
+        message: 'Email not sent',
+        origin: 'email.service.ts',
+      })
+      this.logRepository.saveLog(log);
+
+
         return false        
     }
 
   }
+  
+  async sendEmailWithFileSystemLogs(to: string | string[]){
+
+     const subject = 'Logs de servidor';
+     const htmlBody = `<p>Logs de servidor em anexo</p>`;
+
+
+     const attachements: Attachements[] = [
+     {
+      filename: 'logs-low.log',path: './logs/logs-low.log'
+     }
+
+     ];
+
+     return this.sendEmail({
+      to,
+      subject,
+      attachements,
+      htmlBody
+     });
+
+  }
+    
 
 
 
