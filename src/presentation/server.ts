@@ -8,48 +8,50 @@ import { EmailService } from "./email/email.service";
 import { SendEmailLogs } from "../domain/use-cases/email/send-email-logs";
 
 
+
 const fileSystemLogRepository = new LogRepositoryImpl(
-    new FileSystemDataSource
+  new FileSystemDataSource(),
 );
-
-    const emailService = new EmailService(
-    );
-
+const emailService = new EmailService();
 
 
 export class Server {
-       
-    public static start(){
-        console.log('Server started...');
 
-       //mandar email
-       //new SendEmailLogs(
-         //   emailService,
-           // fileSystemLogRepository
-       ///).execute([
-          // 'ernestoquin2211@gmail.com'
-       //])
+  public static start() {
 
-       // const emailService = new EmailService(
-         //   fileSystemLogRepository
-        //);
-        //emailService.sendEmailWithFileSystemLogs([
-          //'ernestoquin2211@gmail.com'
-        //]);
+    console.log( 'Server started...' );
 
-        //CronService.Createjob(
-          //  '*/5 * * * * *',
-            //() => {
-              //  const url = 'https://www.google.com';
-                //new CheckService(
-                  //  fileSystemLogRepository,
-                    //() => console.log(`Service is up: ${url}`),
-                    //(error) => console.error(error)
-                //).execute(url);
-            //}
-
-        //);
+    //todo: Mandar email
+    // new SendEmailLogs(
+    //   emailService, 
+    //   fileSystemLogRepository,
+    // ).execute(
+    //   ['fernando.herrera85@gmail.com','fernando.herrera.cr@gmail.com']
+    // )
+    // emailService.sendEmailWithFileSystemLogs(
+    //   ['fernando.herrera85@gmail.com','fernando.herrera.cr@gmail.com']
+    // );
+    
+    
+    
+    // CronService.createJob(
+    //   '*/5 * * * * *',
+    //   () => {
+    //     const url = 'https://google.com';
+    //     new CheckService(
+    //       fileSystemLogRepository,
+    //       () => console.log( `${ url } is ok` ),
+    //       ( error ) => console.log( error ),
+    //     ).execute( url );
+    //     // new CheckService().execute( 'http://localhost:3000' );
         
-    }
+    //   }
+    // );
+
+
+  }
+
 
 }
+
+
