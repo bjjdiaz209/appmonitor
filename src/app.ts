@@ -16,6 +16,7 @@ import { Server } from "./presentation/server";
      });
 
 
+
      //crear coleccion  = tables ,documento registro
      //const newLog = await logModel.create({ 
        //   message: 'Test Server started',
@@ -25,12 +26,12 @@ import { Server } from "./presentation/server";
       //});
       //await newLog.save();
         //  console.log(newLog);
-       const logs = await logModel.find();
-           console.log(logs);
+       //const logs = await logModel.find();
+         //  console.log(logs);
 
 
 
 
-        //Server.start();
+        Server.start();
        // console.log(envs);
      }
